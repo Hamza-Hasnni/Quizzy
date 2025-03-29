@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  rflutter_alert: ^2.0.7
 
 dev_dependencies:
   flutter_test:

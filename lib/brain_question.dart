@@ -1,7 +1,7 @@
 import 'package:quizzy/question.dart';
-
+int _questionNumber = 0;
 class BrainQuestion {
-  List<Question> questionBrain = [
+ final List<Question> _questionBrain = [
     Question('Some cats are actually allergic to humans', true),
     Question('You can lead a cow down stairs but not up stairs.', false),
     Question('Approximately one quarter of human bones are in the feet.', true),
@@ -28,4 +28,24 @@ class BrainQuestion {
         'In West Virginia, USA, if you accidentally hit an animal with your car, you are free to take it home to eat.',
         true),
   ];
+  void nextQuestion(){
+    if (_questionNumber < _questionBrain.length -1 ) {
+      _questionNumber++;
+    }
+    print(_questionNumber);
+  }
+ String getQuestionText(){
+  return _questionBrain[_questionNumber].questionText;
+}
+bool getCorrectAnswer(){
+  return _questionBrain[_questionNumber].questionAnswer;
+}
+
+bool isFinished(){
+  if (_questionNumber == _questionBrain.length -1 ) {
+    return true;
+  }else{
+    return false;
+  }
+}
 }

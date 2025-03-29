@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizzy/brain_question.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 void main() => runApp(MyQuizzy());
 
@@ -32,16 +33,34 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKepper = [];
-  int questionNumber = 0;
-  void changeQuestion(bool userAnswer) {
-    if (questionNumber < BrainQuestion().questionBrain.length - 1) {
-      if (userAnswer == BrainQuestion().questionBrain[questionNumber].questionAnswer) {
-        scoreKepper.add(Icon(Icons.check, color: Colors.green,));
-      }else{
-        scoreKepper.add(Icon(Icons.close, color: Colors.red,));
-      }
-      questionNumber++;
+  void checkAnswer(bool userAnswer) {
+    setState(() {
+      if (BrainQuestion().isFinished() == false) {
+        
+    if (userAnswer == BrainQuestion().getCorrectAnswer()) {
+      scoreKepper.add(Icon(Icons.check, color: Colors.green));
+    } else {
+      scoreKepper.add(Icon(Icons.close, color: Colors.red));
     }
+    BrainQuestion().nextQuestion();
+      }else{
+            Alert(
+      context: context,
+      title: "Quiz End",
+      desc:'' ,
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Play Again",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {},
+          width: 120,
+        )
+      ],
+    ).show();
+      }
+    });
   }
 
   @override
@@ -57,7 +76,8 @@ class _QuizPageState extends State<QuizPage> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10.0),
                 child: Text(
-                  BrainQuestion().questionBrain[questionNumber].questionText,
+                  BrainQuestion().getQuestionText(),
+                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -81,9 +101,7 @@ class _QuizPageState extends State<QuizPage> {
                       style: TextStyle(color: Colors.white, fontSize: 30.0),
                     ),
                     onPressed: () {
-                      setState(() {
-                        changeQuestion(true);
-                      });
+                      checkAnswer(true);
                     },
                   ),
                 ),
@@ -100,10 +118,9 @@ class _QuizPageState extends State<QuizPage> {
                       style: TextStyle(fontSize: 30.0, color: Colors.white),
                     ),
                     onPressed: () {
-                      setState(() {
-                        changeQuestion(false);
-                      });
-                      //The user picked false.
+      
+                      checkAnswer(false);
+                    
                     },
                   ),
                 ),
@@ -112,7 +129,7 @@ class _QuizPageState extends State<QuizPage> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
           child: Row(children: scoreKepper),
         ),
       ],
